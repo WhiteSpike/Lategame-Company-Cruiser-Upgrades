@@ -3,8 +3,10 @@ using CSync.Extensions;
 using CSync.Lib;
 using LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades;
 using LategameCompanyCruiserUpgrades.Util;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
+using System;
 using System.Runtime.Serialization;
 
 namespace LategameCompanyCruiserUpgrades.Misc
@@ -160,7 +162,12 @@ namespace LategameCompanyCruiserUpgrades.Misc
 
             #endregion
 
+            InitialSyncCompleted += PluginConfig_InitialSyncCompleted;
             ConfigManager.Register(this);
+        }
+        private void PluginConfig_InitialSyncCompleted(object sender, EventArgs e)
+        {
+            UpgradeBus.Instance.Reconstruct();
         }
     }
 }
