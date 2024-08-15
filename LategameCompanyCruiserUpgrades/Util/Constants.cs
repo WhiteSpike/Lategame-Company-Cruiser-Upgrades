@@ -5,6 +5,7 @@ namespace LategameCompanyCruiserUpgrades.Util
 {
     internal static class Constants
     {
+        internal static readonly string BRAKE_FLUID_OVERRIDE_NAME_KEY = string.Format(LguConstants.OVERRIDE_NAME_KEY_FORMAT, BrakeFluid.UPGRADE_NAME);
         internal static readonly string TURBO_TANK_OVERRIDE_NAME_KEY = string.Format(LguConstants.OVERRIDE_NAME_KEY_FORMAT, TurboTank.UPGRADE_NAME);
         internal static readonly string IGNITION_COIL_OVERRIDE_NAME_KEY = string.Format(LguConstants.OVERRIDE_NAME_KEY_FORMAT, IgnitionCoil.UPGRADE_NAME);
         internal static readonly string FLUFFY_SEATS_OVERRIDE_NAME_KEY = string.Format(LguConstants.OVERRIDE_NAME_KEY_FORMAT, FluffySeats.UPGRADE_NAME);
@@ -12,6 +13,25 @@ namespace LategameCompanyCruiserUpgrades.Util
         internal static readonly string SUPERCHARGED_PISTONS_OVERRIDE_NAME_KEY = string.Format(LguConstants.OVERRIDE_NAME_KEY_FORMAT, SuperchargedPistons.UPGRADE_NAME);
         internal static readonly string RAPID_MOTORS_OVERRIDE_NAME_KEY = string.Format(LguConstants.OVERRIDE_NAME_KEY_FORMAT, RapidMotors.UPGRADE_NAME);
         internal static readonly string VEHICLE_PLATING_OVERRIDE_NAME_KEY = string.Format(LguConstants.OVERRIDE_NAME_KEY_FORMAT, VehiclePlating.UPGRADE_NAME);
+
+        #region Brake Fluid
+
+        internal const string BRAKE_FLUID_ENABLED_KEY = $"Enable {BrakeFluid.UPGRADE_NAME} Upgrade";
+        internal const bool BRAKE_FLUID_ENABLED_DEFAULT = true;
+        internal const string BRAKE_FLUID_ENABLED_DESCRIPTION = "Tier upgrade which increases the braking capability of the Company Cruiser vehicle.";
+
+        internal const string BRAKE_FLUID_PRICE_KEY = $"Price of {BrakeFluid.UPGRADE_NAME} Upgrade";
+        internal const int BRAKE_FLUID_PRICE_DEFAULT = 100;
+
+        internal const string BRAKE_FLUID_CAPACITY_INITIAL_INCREASE_KEY = "Initial Break Power Increase";
+        internal const int BRAKE_FLUID_CAPACITY_INITIAL_INCREASE_DEFAULT = 25;
+        internal const string BRAKE_FLUID_CAPACITY_INITIAL_INCREASE_DESCRIPTION = "Percentage of break power increased when first purchasing the upgrade on the Company Cruiser Vehicle";
+
+        internal const string BRAKE_FLUID_CAPACITY_INCREMENTAL_INCREASE_KEY = "Incremental Break Power Increase";
+        internal const int BRAKE_FLUID_CAPACITY_INCREMENTAL_INCREASE_DEFAULT = 25;
+        internal const string BRAKE_FLUID_CAPACITY_INCREMENTAL_INCREASE_DESCRIPTION = "Percentage of break power increased when purchasing further levels of the upgrade on the Company Cruiser Vehicle";
+
+        #endregion
 
         #region Turbo Tank
 

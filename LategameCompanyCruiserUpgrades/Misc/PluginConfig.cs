@@ -14,6 +14,13 @@ namespace LategameCompanyCruiserUpgrades.Misc
     [DataContract]
     public class PluginConfig : SyncedConfig2<PluginConfig>
     {
+        [field: SyncedEntryField] public SyncedEntry<bool> BRAKE_FLUID_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> BRAKE_FLUID_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> BRAKE_FLUID_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> BRAKE_FLUID_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> BRAKE_FLUID_POWER_INITIAL_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> BRAKE_FLUID_POWER_INCREMENTAL_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> BRAKE_FLUID_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> TURBO_TANK_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TURBO_TANK_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> TURBO_TANK_PRICES { get; set; }
@@ -63,11 +70,25 @@ namespace LategameCompanyCruiserUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> VEHICLE_PLATING_HEALTH_INITIAL_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> VEHICLE_PLATING_ITEM_PROGRESSION_ITEMS { get; set; }
+
+        #region Configuration Constructor
         public PluginConfig(ConfigFile cfg) : base(Metadata.GUID)
         {
+            #region Brake Fluid
+
+            string topSection = BrakeFluid.UPGRADE_NAME;
+            BRAKE_FLUID_ENABLED = cfg.BindSyncedEntry(topSection, Constants.BRAKE_FLUID_ENABLED_KEY, Constants.BRAKE_FLUID_ENABLED_DEFAULT, Constants.BRAKE_FLUID_ENABLED_DESCRIPTION);
+            BRAKE_FLUID_PRICE = cfg.BindSyncedEntry(topSection, Constants.BRAKE_FLUID_PRICE_KEY, Constants.BRAKE_FLUID_PRICE_DEFAULT);
+            BRAKE_FLUID_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, BrakeFluid.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            BRAKE_FLUID_POWER_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, Constants.BRAKE_FLUID_CAPACITY_INITIAL_INCREASE_KEY, Constants.BRAKE_FLUID_CAPACITY_INITIAL_INCREASE_DEFAULT, Constants.BRAKE_FLUID_CAPACITY_INITIAL_INCREASE_DESCRIPTION);
+            BRAKE_FLUID_POWER_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, Constants.BRAKE_FLUID_CAPACITY_INCREMENTAL_INCREASE_KEY, Constants.BRAKE_FLUID_CAPACITY_INCREMENTAL_INCREASE_DEFAULT, Constants.BRAKE_FLUID_CAPACITY_INCREMENTAL_INCREASE_DESCRIPTION);
+            BRAKE_FLUID_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
             #region Turbo Tank
 
-            string topSection = TurboTank.UPGRADE_NAME;
+            topSection = TurboTank.UPGRADE_NAME;
             TURBO_TANK_ENABLED = cfg.BindSyncedEntry(topSection, Constants.TURBO_TANK_ENABLED_KEY, Constants.TURBO_TANK_ENABLED_DEFAULT, Constants.TURBO_TANK_ENABLED_DESCRIPTION);
             TURBO_TANK_PRICE = cfg.BindSyncedEntry(topSection, Constants.TURBO_TANK_PRICE_KEY, Constants.TURBO_TANK_PRICE_DEFAULT);
             TURBO_TANK_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, TurboTank.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
@@ -152,6 +173,7 @@ namespace LategameCompanyCruiserUpgrades.Misc
             #region Override Names
 
             topSection = "Override Names";
+            BRAKE_FLUID_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, Constants.BRAKE_FLUID_OVERRIDE_NAME_KEY, BrakeFluid.UPGRADE_NAME);
             TURBO_TANK_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, Constants.TURBO_TANK_OVERRIDE_NAME_KEY, TurboTank.UPGRADE_NAME);
             IGNITION_COIL_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, Constants.IGNITION_COIL_OVERRIDE_NAME_KEY, IgnitionCoil.UPGRADE_NAME);
             FLUFFY_SEATS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, Constants.FLUFFY_SEATS_OVERRIDE_NAME_KEY, FluffySeats.UPGRADE_NAME);
@@ -169,5 +191,6 @@ namespace LategameCompanyCruiserUpgrades.Misc
         {
             UpgradeBus.Instance.Reconstruct();
         }
+        #endregion
     }
 }

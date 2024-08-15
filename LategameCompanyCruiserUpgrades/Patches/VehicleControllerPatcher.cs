@@ -3,6 +3,7 @@ using LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades;
 using MoreShipUpgrades.Misc.Util;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEngine;
 
 namespace LategameCompanyCruiserUpgrades.Patches
 {
@@ -11,13 +12,24 @@ namespace LategameCompanyCruiserUpgrades.Patches
     {
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(VehicleController.Start))]
-        [HarmonyPatch(nameof(VehicleController.Update))]
-        static IEnumerable<CodeInstruction> IncreaseMaximumHealthTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> StartTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
 
             IncreaseMaximumHealthTranspile(ref index, ref codes);
+            return codes;
+        }
+
+        [HarmonyPatch(nameof(VehicleController.Update))]
+        static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+
+            IncreaseMaximumHealthTranspile(ref index, ref codes);
+            IncreaseBreakingPowerTranspile(ref index, ref codes); // When pressing the brake pedal
+            IncreaseBreakingPowerTranspile(ref index, ref codes); // When in park mode
             return codes;
         }
 
@@ -39,6 +51,17 @@ namespace LategameCompanyCruiserUpgrades.Patches
             MethodInfo getAdditionalMaximumHealth = typeof(VehiclePlating).GetMethod(nameof(VehiclePlating.GetAdditionalMaximumHealth));
 
             Tools.FindField(ref index, ref codes, findField: baseCarHP, addCode: getAdditionalMaximumHealth, errorMessage: "Couldn't find the baseCarHP field");
+        }
+
+        static void IncreaseBreakingPowerTranspile(ref int index, ref List<CodeInstruction> codes)
+        {
+            MethodInfo getAdditionalBrakePower = typeof(BrakeFluid).GetMethod(nameof(BrakeFluid.GetIncreasedBrakingPower));
+
+            Tools.FindFloat(ref index, ref codes, findValue: 2000f, addCode: getAdditionalBrakePower, errorMessage: "Couldn't find the 2000f value for the first wheel");
+            Tools.FindFloat(ref index, ref codes, findValue: 2000f, addCode: getAdditionalBrakePower, errorMessage: "Couldn't find the 2000f value for the second wheel");
+            Tools.FindFloat(ref index, ref codes, findValue: 2000f, addCode: getAdditionalBrakePower, errorMessage: "Couldn't find the 2000f value for the third wheel");
+            Tools.FindFloat(ref index, ref codes, findValue: 2000f, addCode: getAdditionalBrakePower, errorMessage: "Couldn't find the 2000f value for the fourth wheel");
+            Tools.FindFloat(ref index, ref codes, findValue: 2000f, addCode: getAdditionalBrakePower, errorMessage: "Couldn't find the 2000f value for the remaining wheels");
         }
 
         [HarmonyTranspiler]

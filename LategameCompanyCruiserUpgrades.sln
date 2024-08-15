@@ -4,6 +4,11 @@ VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LategameCompanyCruiserUpgrades", "LategameCompanyCruiserUpgrades\LategameCompanyCruiserUpgrades.csproj", "{23EDEEFD-AC9F-460F-BF9A-8FB3DC4C2C74}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{08C512E7-358A-48BA-9BBC-8C223BEF4F3C}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
