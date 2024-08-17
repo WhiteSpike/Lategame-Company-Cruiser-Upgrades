@@ -3,7 +3,6 @@ using LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades;
 using MoreShipUpgrades.Misc.Util;
 using System.Collections.Generic;
 using System.Reflection;
-using UnityEngine;
 
 namespace LategameCompanyCruiserUpgrades.Patches
 {
