@@ -1,5 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.TerminalNodes;
+using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
@@ -34,7 +34,7 @@ namespace LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades
             get
             {
                 string[] prices = Plugin.Config.IGNITION_COIL_PRICES.Value.Split(',');
-                return Plugin.Config.IGNITION_COIL_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return Plugin.Config.IGNITION_COIL_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
