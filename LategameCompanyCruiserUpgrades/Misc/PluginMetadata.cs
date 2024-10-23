@@ -4,6 +4,6 @@
     {
         public const string GUID = "com.github.WhiteSpike.LategameCompanyCruiserUpgrades";
         public const string NAME = "Lategame Company Cruiser Upgrades";
-        public const string VERSION = "1.1.0";
+        public const string VERSION = "1.1.1";
     }
 }
