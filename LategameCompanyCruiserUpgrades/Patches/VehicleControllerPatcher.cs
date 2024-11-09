@@ -11,6 +11,7 @@ namespace LategameCompanyCruiserUpgrades.Patches
     {
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(VehicleController.Start))]
+        [HarmonyPatch(nameof(VehicleController.AddEngineOil))]
         static IEnumerable<CodeInstruction> StartTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> codes = new(instructions);
