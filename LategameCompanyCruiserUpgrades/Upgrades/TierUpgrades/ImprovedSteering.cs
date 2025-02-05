@@ -10,12 +10,12 @@ namespace LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades
     internal class ImprovedSteering : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Improved Steering";
-        internal const string PRICES_DEFAULT = "100,150,250";
+        internal const string PRICES_DEFAULT = "100,100,150,250";
 
         public override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = Plugin.Config.IMPROVED_STEERING_OVERRIDE_NAME;
+            overridenUpgradeName = Plugin.Config.ImprovedSteeringConfiguration.OverrideName;
             base.Start();
         }
         public override void Load()
@@ -27,7 +27,7 @@ namespace LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades
         public override void Increment()
         {
             base.Increment();
-            UpdateCurrentVehicleTurningSpeed(Plugin.Config.IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE, add: true);
+            UpdateCurrentVehicleTurningSpeed(Plugin.Config.ImprovedSteeringConfiguration.IncrementalEffect, add: true);
         }
 
         public override void Unwind()
@@ -48,11 +48,11 @@ namespace LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades
         }
         public static float ComputeAdditionalAcceleration()
         {
-            return Plugin.Config.IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * Plugin.Config.IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE);
+            return Plugin.Config.ImprovedSteeringConfiguration.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * Plugin.Config.ImprovedSteeringConfiguration.IncrementalEffect);
         }
         public static float GetAdditionalTurningSpeed(float defaultValue)
         {
-            if (!Plugin.Config.IMPROVED_STEERING_ENABLED) return defaultValue;
+            if (!Plugin.Config.ImprovedSteeringConfiguration.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float additionalValue = ComputeAdditionalAcceleration();
             return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
@@ -61,19 +61,19 @@ namespace LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades
         {
             get
             {
-                string[] prices = Plugin.Config.IMPROVED_STEERING_PRICES.Value.Split(',');
-                return Plugin.Config.IMPROVED_STEERING_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                string[] prices = Plugin.Config.ImprovedSteeringConfiguration.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => Plugin.Config.IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE.Value + level * Plugin.Config.IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE.Value;
+            System.Func<int, float> infoFunction = level => Plugin.Config.ImprovedSteeringConfiguration.InitialEffect.Value + level * Plugin.Config.ImprovedSteeringConfiguration.IncrementalEffect.Value;
             const string infoFormat = "LVL {0} - ${1} - Company Cruiser vehicle's steering speed (turning speed) is increased by {2}.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, Plugin.Config.IMPROVED_STEERING_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, Plugin.Config.ImprovedSteeringConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -84,15 +84,7 @@ namespace LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            PluginConfig configuration = Plugin.Config;
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                shareStatus: true,
-                                                configuration.IMPROVED_STEERING_ENABLED.Value,
-                                                configuration.IMPROVED_STEERING_PRICE.Value,
-                                                UpgradeBus.ParseUpgradePrices(configuration.IMPROVED_STEERING_PRICES.Value),
-                                                UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? configuration.IMPROVED_STEERING_OVERRIDE_NAME : "",
-                                                Plugin.networkPrefabs[UPGRADE_NAME]);
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, Plugin.Config.ImprovedSteeringConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
         }
     }
 }

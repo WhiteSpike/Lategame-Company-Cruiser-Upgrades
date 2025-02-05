@@ -10,12 +10,12 @@ namespace LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades
     internal class VehiclePlating : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Vehicle Plating";
-        internal const string PRICES_DEFAULT = "300,400,500,600";
+        internal const string PRICES_DEFAULT = "150,300,400,500,600";
 
         public override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = Plugin.Config.VEHICLE_PLATING_OVERRIDE_NAME;
+            overridenUpgradeName = Plugin.Config.VehiclePlatingConfiguration.OverrideName;
             base.Start();
         }
         public override void Load()
@@ -27,7 +27,7 @@ namespace LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades
         public override void Increment()
         {
             base.Increment();
-            UpdateCurrentVehicleHealth(Plugin.Config.VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE, add: true);
+            UpdateCurrentVehicleHealth(Plugin.Config.VehiclePlatingConfiguration.IncrementalEffect, add: true);
         }
 
         public override void Unwind()
@@ -37,7 +37,7 @@ namespace LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades
         }
         public static int GetAdditionalMaximumHealth(int defaultValue)
         {
-            if (!Plugin.Config.VEHICLE_PLATING_ENABLED) return defaultValue;
+            if (!Plugin.Config.VehiclePlatingConfiguration.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             int additionalValue = ComputeAdditionalMaximumHealth();
             return Mathf.Clamp(defaultValue + additionalValue, defaultValue, int.MaxValue);
@@ -57,25 +57,25 @@ namespace LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades
 
         public static int ComputeAdditionalMaximumHealth()
         {
-            return Plugin.Config.VEHICLE_PLATING_HEALTH_INITIAL_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * Plugin.Config.VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE);
+            return Plugin.Config.VehiclePlatingConfiguration.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * Plugin.Config.VehiclePlatingConfiguration.IncrementalEffect);
         }
         public override bool CanInitializeOnStart
         {
             get
             {
-                string[] prices = Plugin.Config.VEHICLE_PLATING_PRICES.Value.Split(',');
-                return Plugin.Config.VEHICLE_PLATING_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                string[] prices = Plugin.Config.VehiclePlatingConfiguration.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => Plugin.Config.VEHICLE_PLATING_HEALTH_INITIAL_INCREASE.Value + level * Plugin.Config.VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE.Value;
+            System.Func<int, float> infoFunction = level => Plugin.Config.VehiclePlatingConfiguration.InitialEffect.Value + level * Plugin.Config.VehiclePlatingConfiguration.IncrementalEffect.Value;
             const string infoFormat = "LVL {0} - ${1} - Company Cruiser vehicle's maximum health is increased by {2}.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, Plugin.Config.VEHICLE_PLATING_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, Plugin.Config.VehiclePlatingConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -86,15 +86,7 @@ namespace LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            PluginConfig configuration = Plugin.Config;
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                shareStatus: true,
-                                                configuration.VEHICLE_PLATING_ENABLED.Value,
-                                                configuration.VEHICLE_PLATING_PRICE.Value,
-                                                UpgradeBus.ParseUpgradePrices(configuration.VEHICLE_PLATING_PRICES.Value),
-                                                UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? configuration.VEHICLE_PLATING_OVERRIDE_NAME : "",
-                                                Plugin.networkPrefabs[UPGRADE_NAME]);
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, Plugin.Config.VehiclePlatingConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
         }
     }
 }
