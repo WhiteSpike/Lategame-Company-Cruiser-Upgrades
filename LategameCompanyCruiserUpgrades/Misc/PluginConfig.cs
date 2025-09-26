@@ -3,11 +3,9 @@ using CSync.Extensions;
 using CSync.Lib;
 using LategameCompanyCruiserUpgrades.Upgrades.TierUpgrades;
 using LategameCompanyCruiserUpgrades.Util;
-using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
-using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
+using MoreShipUpgrades.Configuration.Upgrades.Abstractions.TIerUpgrades;
+using MoreShipUpgrades.Configuration.Upgrades.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.Upgrades;
-using MoreShipUpgrades.Misc.Util;
 using System;
 using System.Runtime.Serialization;
 
